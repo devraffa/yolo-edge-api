@@ -1,5 +1,5 @@
 [core]
     remote = local_remote
 ['remote "local_remote"']
-    url = ssh://100.75.204.82/home/rafapico/dvc-storage/files/md5
+    url = ssh://100.75.204.82/home/rafapico/dvc-storage
     user = rafapico
