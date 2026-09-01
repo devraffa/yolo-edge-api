@@ -2,3 +2,4 @@
     remote = local_remote
 ['remote "local_remote"']
     url = ssh://rafapi@100.75.204.82/home/rafapi/dvc-storage
+    user = rafapico
