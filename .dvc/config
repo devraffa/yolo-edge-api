@@ -1,4 +1,4 @@
 [core]
     remote = local_remote
 ['remote "local_remote"']
-    url = /home/rafapico/dvc-storage
+    url = ssh://rafapi@100.75.204.82/home/rafapi/dvc-storage
