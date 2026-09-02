@@ -2,8 +2,7 @@ services:
 
 
   yolo-api:
-    image:
-ghcr.io/devraffa/yolo-edge-api/yolo-api:latest
+    image: ghcr.io/devraffa/yolo-edge-api/yolo-api:latest
     build:
       context: .
       dockerfile: Dockerfile.api
