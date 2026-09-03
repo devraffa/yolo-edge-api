@@ -149,16 +149,16 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.RPI_SSH_KEY }}" | tr -d '\r' > ~/.ssh/dvc_key
           chmod 600 ~/.ssh/dvc_key
-          
-          # Mapeia a identidade da Raspberry Pi para evitar bloqueio do SSH
-          ssh-keyscan -H ${{ secrets.RPI_HOST }} >> ~/.ssh/known_hosts
-          
           dvc remote modify --local local_remote keyfile ~/.ssh/dvc_key
           dvc pull
-
-      - name: Executar quality gate (mAP@0.5 >= 0.50)
-        run: python scripts/validate_model.py --threshold 0.50
-
+      - name: Recuperar dataset via DVC
+        run: dvc pull dataset/exports/epi-v1
+      - name: Executar quality gate com dataset customizado
+        run: |
+          python scripts/validate_model.py \
+            --model models/yolo-epi.pt \
+            --dataset dataset/exports/epi-v1/data.yaml \
+            --threshold 0.60
 
   # ─────────────────────────────────────────────────────────
   # JOB 4: Deploy no Raspberry Pi 5 via SSH
