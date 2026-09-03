@@ -1,6 +1,4 @@
 services:
-
-
   yolo-api:
     image: ghcr.io/devraffa/yolo-edge-api/yolo-api:latest
     build:
@@ -10,9 +8,9 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./models:/app/models:ro    # pesos somente-leitura
-      - ./output:/app/output       # resultados gravados aqui
-      - ./images:/app/images:ro    # imagens de teste
+      - ./models:/app/models:ro  # pesos somente-leitura
+      - ./output:/app/output     # resultados gravados aqui
+      - ./images:/app/images:ro  # imagens de teste
     environment:
       - MODEL_NAME=yolov8n.pt
     networks:
@@ -24,7 +22,6 @@ services:
       timeout: 5s
       retries: 3
 
-
   yolo-client:
     build:
       context: .
@@ -34,13 +31,39 @@ services:
       - ./images:/client/images:ro
       - ./output:/client/output
     environment:
-      - API_URL=http://yolo-api:8000   # resolve pelo nome do serviço
+      - API_URL=http://yolo-api:8000
     networks:
       - yolo-net
     depends_on:
       yolo-api:
-        condition: service_healthy     # aguarda healthcheck passar
+        condition: service_healthy
 
+  yolo-stream:
+    build:
+      context: .
+      dockerfile: Dockerfile.api    # reutiliza a mesma base ARM64
+    container_name: yolo-stream
+    ports:
+      - "5000:5000"
+    privileged: true              # mesmo acesso à câmera do yolo-api
+    volumes:
+      - ./stream:/app/stream        # código do módulo de streaming
+      - ./models:/app/models:ro     # pesos do modelo (read-only)
+      - /dev:/dev                   # dispositivos de hardware do host
+      - /run/udev:/run/udev:ro      # permite ao libcamera identificar o sensor via udev
+    environment:
+      - MODEL_NAME=yolov8n.pt
+    command: >
+      python3 stream/mjpeg_server.py
+      --device 0
+      --infer-every 3
+      --infer-size 320
+      --port 5000
+    networks:
+      - yolo-net
+    restart: unless-stopped
+    depends_on:
+      - yolo-api
 
 networks:
   yolo-net:
