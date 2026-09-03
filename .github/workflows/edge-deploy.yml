@@ -157,10 +157,10 @@ jobs:
           
           # Configura a chave privada localmente e baixa o modelo
           python -m dvc remote modify --local local_remote keyfile "$HOME/.ssh/dvc_key"
-          python -m dvc pull models/yolo-epi.pt.dvc
+          python -m dvc pull models/yolo-epi.pt
 
       - name: Recuperar dataset via DVC
-        run: python -m dvc pull dataset/exports/epi-v1.dvc
+        run: python -m dvc pull dataset/exports/epi-v1
 
       - name: Executar quality gate com dataset customizado
         run: |
