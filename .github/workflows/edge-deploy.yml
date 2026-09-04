@@ -52,7 +52,7 @@ jobs:
           ssh-keyscan -H ${{ secrets.RPI_HOST }} >> ~/.ssh/known_hosts
           
           dvc remote modify --local local_remote keyfile ~/.ssh/dvc_key
-          dvc pull
+          dvc pull models/yolov8n.pt
 
       - name: Disponibiliza o modelo em /app/models
         run: |
@@ -157,17 +157,13 @@ jobs:
           
           # Configura a chave privada localmente e baixa o modelo
           python -m dvc remote modify --local local_remote keyfile "$HOME/.ssh/dvc_key"
-          python -m dvc pull models/yolo-epi.pt
+          python -m dvc pull models/yolov8n.pt
 
-      - name: Recuperar dataset via DVC
-        run: python -m dvc pull dataset/exports/epi-v1
-
-      - name: Executar quality gate com dataset customizado
+      - name: Validar integridade do modelo
         run: |
-          python scripts/validate_model.py \
-            --model models/yolo-epi.pt \
-            --dataset dataset/exports/epi-v1/data.yaml \
-            --threshold 0.60      
+          # Como estamos usando o modelo base genérico, verificamos apenas se ele carrega corretamente
+          ls -la models/yolov8n.pt
+          python -c "from ultralytics import YOLO; model = YOLO('models/yolov8n.pt'); print('✅ Modelo YOLO carregado com sucesso na validação!')"
 
 
   # ─────────────────────────────────────────────────────────

@@ -62,7 +62,7 @@ class OptimizedCamera:
 
 
     def start(self):
-        self._proc = subprocess.Popen(self._cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+        self._proc = subprocess.Popen(self._cmd, stdout=subprocess.PIPE, stderr=None)
         self._thread.start()
         return self
 
