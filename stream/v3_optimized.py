@@ -133,8 +133,8 @@ class RealtimeDetector:
         self.conf        = conf
         self.infer_every = infer_every
         self.infer_size  = infer_size
-	from preprocessing.preprocessor import Preprocessor, PreprocessConfig
-	self.preprocessor = Preprocessor(PreprocessConfig(infer_size=infer_size))
+        from preprocessing.preprocessor import Preprocessor, PreprocessConfig
+        self.preprocessor = Preprocessor(PreprocessConfig(infer_size=infer_size))
 
         self._frame_idx   = 0
         self._last_boxes  = []      # [(label, conf, x1,y1,x2,y2), ...]
@@ -166,7 +166,7 @@ class RealtimeDetector:
         # ── Inferência (apenas a cada N frames) ──────────────
         if self._frame_idx % self.infer_every == 0:
 
-	preproc_result = self.preprocessor.process(frame)
+            preproc_result = self.preprocessor.process(frame)
 
 
             t0 = time.perf_counter()

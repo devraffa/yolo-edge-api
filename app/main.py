@@ -9,6 +9,7 @@ import numpy as np
 from fastapi import FastAPI, HTTPException, Response
 from model import get_default_model_name, load_model
 from PIL import Image
+from preprocessing.preprocessor import CONFIG_DEFAULT, Preprocessor
 from schemas import (
     BatchPredictRequest,
     BatchPredictResponse,
@@ -19,7 +20,6 @@ from schemas import (
     PredictResponse,
 )
 
-from preprocessing.preprocessor import CONFIG_DEFAULT, Preprocessor
 
 
 def log_event(event: str, level: str = "INFO", **kwargs):
